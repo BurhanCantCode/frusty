@@ -18,11 +18,10 @@ import 'katex/dist/katex.min.css';
 import { InlineMath, BlockMath } from 'react-katex';
 
 type CodeProps = {
-  node?: any;
   inline?: boolean;
   className?: string;
-  children: React.ReactNode;
-} & React.HTMLAttributes<HTMLElement>;
+  children?: React.ReactNode;
+} & Omit<React.ComponentPropsWithoutRef<'code'>, 'children' | 'className'>;
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -109,10 +108,9 @@ export default function ChatPage() {
             ul: ({ children }) => <ul className="list-disc ml-4 my-2">{children}</ul>,
             ol: ({ children }) => <ol className="list-decimal ml-4 my-2">{children}</ol>,
             li: ({ children }) => <li className="my-1">{children}</li>,
-            code: ({ inline, className, children, ...props }: CodeProps) => {
-              if (!children) return null;
+            code: ({ inline, className, children, ...props }) => {
+              const textContent = children?.toString() || '';
               const match = /language-(\w+)/.exec(className || '');
-              const textContent = children.toString();
               
               if (inline && textContent.startsWith('$') && textContent.endsWith('$')) {
                 const math = textContent.slice(1, -1);
@@ -148,10 +146,9 @@ export default function ChatPage() {
                 ul: ({ children }) => <ul className="list-disc ml-4 my-2">{children}</ul>,
                 ol: ({ children }) => <ol className="list-decimal ml-4 my-2">{children}</ol>,
                 li: ({ children }) => <li className="my-1">{children}</li>,
-                code: ({ inline, className, children, ...props }: CodeProps) => {
-                  if (!children) return null;
+                code: ({ inline, className, children, ...props }) => {
+                  const textContent = children?.toString() || '';
                   const match = /language-(\w+)/.exec(className || '');
-                  const textContent = children.toString();
                   
                   if (inline && textContent.startsWith('$') && textContent.endsWith('$')) {
                     const math = textContent.slice(1, -1);
