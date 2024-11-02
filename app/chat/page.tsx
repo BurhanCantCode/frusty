@@ -17,17 +17,6 @@ import ReactMarkdown from 'react-markdown';
 import 'katex/dist/katex.min.css';
 import { InlineMath, BlockMath } from 'react-katex';
 
-declare module 'react-katex' {
-  interface KatexProps {
-    math: string;
-    block?: boolean;
-    errorColor?: string;
-    renderError?: (error: any) => JSX.Element;
-  }
-  export const InlineMath: React.FC<KatexProps>;
-  export const BlockMath: React.FC<KatexProps>;
-}
-
 type CodeProps = {
   node?: any;
   inline?: boolean;
