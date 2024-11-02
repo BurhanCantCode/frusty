@@ -2,12 +2,14 @@ import { NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
 import { type Message } from '@/lib/constants';
 
-if (!process.env.GROQ_API_KEY) {
-  throw new Error('GROQ_API_KEY is not set in environment variables');
+const apiKey = process.env.GROQ_API_KEY;
+
+if (!apiKey) {
+  console.error('GROQ_API_KEY is not set in environment variables');
 }
 
 const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY
+  apiKey: apiKey || ''
 });
 
 type ChatMessage = {
@@ -22,6 +24,13 @@ type ChatMessage = {
 };
 
 export async function POST(request: Request) {
+  if (!apiKey) {
+    return NextResponse.json(
+      { role: 'assistant', content: 'API key not configured. Please set GROQ_API_KEY environment variable.' },
+      { status: 500 }
+    );
+  }
+
   try {
     const { messages } = await request.json();
 
