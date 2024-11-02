@@ -1,20 +1,20 @@
 import { NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
+import { type Message } from '@/lib/constants';
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY!
 });
 
-// Update the message type
-type ImageMessage = {
+type ChatMessage = {
   role: 'user' | 'assistant' | 'system';
-  content: Array<{
+  content: string | {
     type: 'text' | 'image_url';
     text?: string;
     image_url?: {
       url: string;
     };
-  }>;
+  }[];
 };
 
 export async function POST(request: Request) {
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     const base64Image = imageContent.image_url.url.replace(/^data:image\/\w+;base64,/, '');
 
     // Create analysis prompt without system message
-    const analysisMessage: ImageMessage = {
+    const analysisMessage: ChatMessage = {
       role: 'user',
       content: [
         { 
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     console.log('Sending analysis request...');
 
     const completion = await groq.chat.completions.create({
-      messages: [analysisMessage],
+      messages: [analysisMessage] as any, // Type assertion to bypass strict typing
       model: "llama-3.2-11b-vision-preview",
       temperature: 0.5,
       max_tokens: 8192,
