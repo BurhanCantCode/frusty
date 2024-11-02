@@ -2,8 +2,12 @@ import { NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
 import { type Message } from '@/lib/constants';
 
+if (!process.env.GROQ_API_KEY) {
+  throw new Error('GROQ_API_KEY is not set in environment variables');
+}
+
 const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY!
+  apiKey: process.env.GROQ_API_KEY
 });
 
 type ChatMessage = {
