@@ -102,7 +102,7 @@ export const GROQ_MODELS = [
 ] as const;
 
 export type ModelId = typeof GROQ_MODELS[number]['id'];
-export type ModelCategory = 'Mistral' | 'Google' | 'Meta' | 'Vision Models' | 'Audio Models' | 'Groq';
+export type ModelCategory = typeof GROQ_MODELS[number]['category'];
 
 export interface Message {
   role: 'user' | 'assistant' | 'system';
@@ -128,22 +128,23 @@ export interface ChatSession {
 }
 
 // Initialize with empty arrays for each model
-export const initialChatSessions: Record<ModelId, Message[]> = Object.fromEntries(
-  GROQ_MODELS.map(model => [model.id, []])
-) as Record<ModelId, Message[]>;
+export const initialChatSessions = GROQ_MODELS.reduce((acc, model) => {
+  acc[model.id] = [];
+  return acc;
+}, {} as Record<ModelId, Message[]>);
 
 // Helper functions
 export function getModelById(id: ModelId) {
   return GROQ_MODELS.find(model => model.id === id);
 }
 
-export function getModelsByCategory(category: ModelCategory) {
+export function getModelsByCategory(category: string) {
   return GROQ_MODELS.filter(model => {
     switch (category) {
       case 'Text':
         return model.category === 'Mistral' || model.category === 'Google';
       case 'Vision':
-        return model.category === 'Vision';
+        return model.category === 'Vision Models';
       case 'Audio':
         return model.category === 'Audio Models';
       default:
