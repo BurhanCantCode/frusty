@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import { Card } from "./ui/card";
 import { Bot, User } from "lucide-react";
+import Image from 'next/image';
 
 type ContentItem = {
   type: "text" | "image_url";
@@ -46,6 +47,7 @@ export function ChatMessage({ message }: { message: Message }) {
         </div>
         <div className="flex flex-col gap-3">
           {imageContent && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img 
               src={imageContent} 
               alt="Uploaded content"
