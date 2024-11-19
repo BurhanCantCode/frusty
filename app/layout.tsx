@@ -1,15 +1,23 @@
+import * as React from "react";
 import type { Metadata } from "next";
-import { Inter as FontSans } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import { cn } from "@/lib/utils";
+import { Header } from "@/components/header";
+import { Toaster } from "@/components/ui/toaster";
 
-const fontSans = FontSans({
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
-  title: "Fuck GPA - AI Chat",
-  description: "No signup. No BS. Just start chatting.",
+  title: "GYATTGPT | No Cap AI Chat",
+  description: "Experience AI-powered chat with no limits, no signup, fr fr",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -19,8 +27,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${fontSans.variable} font-sans antialiased`}>
-        {children}
+      <body className={cn("min-h-screen antialiased", inter.variable)}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="relative flex min-h-screen flex-col">
+            <Header />
+            <main className="flex-1">{children}</main>
+          </div>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
