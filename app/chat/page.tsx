@@ -14,7 +14,7 @@ import {
   SelectLabel,
 } from "@/components/ui/select";
 import { GROQ_MODELS, initialChatSessions, type Message, type ModelId, type ChatSession, getModelById } from "@/lib/constants";
-import { Send, ImagePlus, X, Plus, MessageSquare, Mic, Upload } from "lucide-react";
+import { Send, ImagePlus, X, Plus, MessageSquare, Mic, Upload, Trash2 } from "lucide-react";
 import { ChatMessage } from "@/components/chat-message";
 import { useToast } from "@/components/ui/use-toast";
 import { format } from "date-fns";
@@ -385,25 +385,62 @@ export default function ChatPage() {
     return new Blob([wavData], { type: 'audio/wav' });
   };
 
-  // Add visual indicator for model in chat list
+  const deleteChat = (chatId: string) => {
+    // Remove the chat from savedChats
+    setSavedChats(prev => prev.filter(chat => chat.id !== chatId));
+    
+    // If the deleted chat was the current chat, clear the messages
+    if (chatId === currentChatId) {
+      setMessages([]);
+      setCurrentChatId(null);
+      setInput("");
+      setImage(null);
+      setAudioUrl(null);
+    }
+
+    // Show success toast
+    toast({
+      title: "Chat deleted",
+      description: "The chat has been permanently deleted.",
+    });
+  };
+
+  // Update the renderChatButton function
   const renderChatButton = (chat: ChatSession) => (
-    <button
+    <div
       key={chat.id}
-      onClick={() => loadChat(chat.id)}
-      className={`w-full px-4 py-2 text-left hover:bg-accent flex flex-col gap-1 ${
+      className={`w-full px-4 py-2 hover:bg-accent flex flex-col gap-1 ${
         currentChatId === chat.id ? 'bg-accent' : ''
       }`}
     >
-      <span className="font-medium truncate">{chat.name}</span>
       <div className="flex items-center justify-between">
-        <span className="text-xs text-muted-foreground">
-          {formatDate(chat.lastUpdated)}
-        </span>
-        <span className="text-xs bg-muted px-2 py-0.5 rounded-full">
-          {getModelById(chat.modelId)?.name.split(' ')[0]}
-        </span>
+        <button
+          onClick={() => loadChat(chat.id)}
+          className="flex-1 text-left"
+        >
+          <span className="font-medium truncate block">{chat.name}</span>
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-muted-foreground">
+              {formatDate(chat.lastUpdated)}
+            </span>
+            <span className="text-xs bg-muted px-2 py-0.5 rounded-full">
+              {getModelById(chat.modelId)?.name.split(' ')[0]}
+            </span>
+          </div>
+        </button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+          onClick={(e) => {
+            e.stopPropagation();
+            deleteChat(chat.id);
+          }}
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
       </div>
-    </button>
+    </div>
   );
 
   return (
