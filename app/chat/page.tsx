@@ -102,7 +102,7 @@ export default function ChatPage() {
 
     document.addEventListener('paste', handlePaste);
     return () => document.removeEventListener('paste', handlePaste);
-  }, []);
+  }, [handleImageSelect]);
 
   const createNewChat = () => {
     const newChat: ChatSession = {

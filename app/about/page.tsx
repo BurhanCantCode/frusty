@@ -107,14 +107,14 @@ export default function AboutPage() {
           <h2 className="text-2xl font-bold mb-4">Why Though? 🤔</h2>
           <div className="space-y-4 text-lg">
             <p>
-              ChatGPT be like: "Sorry, you've reached your limit" 🤓
+              ChatGPT be like: &quot;Sorry, you&apos;ve reached your limit&quot; 🤓
               <br />
-              Me: "NAAAAHHHH FR FR?" 
+              Me: &quot;NAAAAHHHH FR FR?&quot; 
             </p>
             <p>
-              OpenAI: "Please sign up for Plus" 🤑
+              OpenAI: &quot;Please sign up for Plus&quot; 🤑
               <br />
-              Me: "Skibidi toilet camera man says NO" 🚽📸
+              Me: &quot;Skibidi toilet camera man says NO&quot; 🚽📸
             </p>
             <p className="font-bold text-xl">
               So I made this absolutely bussin app that just works
@@ -160,7 +160,7 @@ export default function AboutPage() {
         {/* Bottom Text */}
         <section className="text-center">
           <p className="text-sm text-muted-foreground">
-            Built with 💀 by someone who got tired of ChatGPT's tomfoolery
+            Built with 💀 by someone who got tired of ChatGPT&apos;s tomfoolery
             <br />
             Powered by GYATT technology and skibidi toilet energy
           </p>
